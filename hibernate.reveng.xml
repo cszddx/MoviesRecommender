@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+	<table name="MOVIE" schema="MOVIES" class="Movie">
+		<primary-key>
+			<key-column name="MOVIEID" jdbc-type="BIGINT"
+				property="MovieId" />
+		</primary-key>
+		<column name="TITLE" jdbc-type="VARCHAR" property="Title"></column>
+		<column name="GENRES" jdbc-type="VARCHAR" property="Genres"></column>
+	</table>
+	<table name="LINK" schema="MOVIES" class="Link">
+		<primary-key>
+			<key-column name="MOVIEID" jdbc-type="BIGINT"
+				property="MovieId" />
+		</primary-key>
+		<column name="IMDBID" jdbc-type="BIGINT" property="ImdbId"></column>
+		<column name="TMDID" jdbc-type="BIGINT" property="TmdId"></column>
+	</table>
+	<table name="RATING" schema="MOVIES" class="RATING">
+		<primary-key>
+			<key-column name="RATINGID" jdbc-type="BIGINT"
+				property="RatingId" />
+		</primary-key>
+		<column name="USERID" jdbc-type="BIGINT" property="UserId"></column>
+		<column name="MOVIEID" jdbc-type="BIGINT" property="MovieId"></column>
+		<column name="RATING" jdbc-type="DECIMAL(2,1)"
+			property="Rating">
+		</column>
+		<column name="CREATEDATE" jdbc-type="TIMESTAMP"
+			property="CreateDate">
+		</column>
+	</table>
+	<table name="TAG" schema="MOVIES" class="Tag">
+		<primary-key>
+			<key-column name="TAGID" jdbc-type="BIGINT"
+				property="TagId" />
+		</primary-key>
+		<column name="USERID" jdbc-type="BIGINT" property="UserId"></column>
+		<column name="MOVIEID" jdbc-type="BIGINT" property="MovieId"></column>
+		<column name="TAGTXT" jdbc-type="BIGINT" property="TagTxt"></column>
+		<column name="CREATEDATE" jdbc-type="TIMESTAMP"
+			property="CreateDate">
+		</column>
+	</table>
+	<table name="USERS" schema="MOVIES" class="Users">
+		<primary-key>
+			<key-column name="USERID" jdbc-type="BIGINT"
+				property="UserId" />
+		</primary-key>
+		<column name="EMAIL" jdbc-type="VARCHAR" property="Email"></column>
+		<column name="USERNAME" jdbc-type="VARCHAR"
+			property="UserName">
+		</column>
+	</table>
+	<table name="SIMILARITY" schema="MOVIES" class="Similarity">
+		<primary-key>
+			<key-column name="SIMILARITYID" jdbc-type="BITINT"
+				property="SimilarityId" />
+		</primary-key>
+		<column name="USERID" jdbc-type="BITINT" property="UserId"></column>
+		<column name="SIMILARUSERID" jdbc-type="BITINT"
+			property="SimilaUserId">
+		</column>
+		<column name="SIMILARITYGRADE" jdbc-type="DOUBLE" property="SimilarityGrade"></column>
+	</table>
+</hibernate-reverse-engineering>

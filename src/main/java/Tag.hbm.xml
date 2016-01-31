@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.analysis.movie.entity.Tag" table="TAG" schema="MOVIES">
+        <id name="tagid" type="long">
+            <column name="TAGID" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="movie" class="com.analysis.movie.entity.Movie" fetch="select">
+            <column name="MOVIEID" />
+        </many-to-one>
+        <many-to-one name="users" class="com.analysis.movie.entity.Users" fetch="select">
+            <column name="USERID" />
+        </many-to-one>
+        <property name="tagtxt" type="string">
+            <column name="TAGTXT" />
+        </property>
+        <property name="createdate" type="timestamp">
+            <column name="CREATEDATE" length="29" />
+        </property>
+    </class>
+</hibernate-mapping>

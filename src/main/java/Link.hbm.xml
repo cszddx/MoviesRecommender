@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.analysis.movie.entity.Link" table="LINK" schema="MOVIES">
+        <id name="movieid" type="long">
+            <column name="MOVIEID" />
+            <generator class="assigned" />
+        </id>
+        <one-to-one name="movie" class="com.analysis.movie.entity.Movie" constrained="true"></one-to-one>
+        <property name="imdbid" type="string">
+            <column name="IMDBID" />
+        </property>
+        <property name="tmdbid" type="string">
+            <column name="TMDbID" />
+        </property>
+    </class>
+</hibernate-mapping>
