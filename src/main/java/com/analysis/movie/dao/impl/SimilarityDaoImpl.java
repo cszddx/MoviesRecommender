@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.analysis.movie.common.UserSimilarity;
 import com.analysis.movie.dao.api.SimilarityDao;
-import com.analysis.movie.entity.Similarity;
 
 @Repository
 public class SimilarityDaoImpl implements SimilarityDao {
@@ -23,13 +22,13 @@ public class SimilarityDaoImpl implements SimilarityDao {
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
     @Override
-    public List<Similarity> getSimilarities(long userId) {
+    public List<Long> getSimilarUsers(long userId) {
         Session session = sessionFactory.getCurrentSession();
         Query query = session
-                .createQuery("from Similarity as similarity left outer join fetch similarity.usersByUserid as users where users.userid = :userId");
+                .createQuery("select similarity.usersBySimilaruserid from Similarity as similarity left outer join similarity.usersByUserid as users where users.userId = :userId");
         query.setParameter("userId", userId);
         @SuppressWarnings("unchecked")
-        List<Similarity> result = query.list();
+        List<Long> result = query.list();
 
         return result;
     }

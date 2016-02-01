@@ -1,40 +1,53 @@
 package com.analysis.movie.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "LINK", schema = "MOVIES")
 public class Link implements java.io.Serializable {
 
     /**
      *
      */
     private static final long serialVersionUID = 1L;
-
-    private long movieid;
+    private Long movieId;
     private Movie movie;
-    private String imdbid;
-    private String tmdbid;
+    private String imdbId;
+    private String tmdbId;
 
     public Link() {
     }
 
-    public Link(long movieid, Movie movie) {
-        this.movieid = movieid;
+    public Link(Long movieId, Movie movie) {
+        this.movieId = movieId;
         this.movie = movie;
     }
 
-    public Link(long movieid, Movie movie, String imdbid, String tmdbid) {
-        this.movieid = movieid;
+    public Link(Long movieId, Movie movie, String imdbId, String tmdbId) {
+        this.movieId = movieId;
         this.movie = movie;
-        this.imdbid = imdbid;
-        this.tmdbid = tmdbid;
+        this.imdbId = imdbId;
+        this.tmdbId = tmdbId;
     }
 
-    public long getMovieid() {
-        return this.movieid;
+    @Id
+    @Column(name = "MOVIEID", unique = true, nullable = false)
+    public Long getMovieId() {
+        return this.movieId;
     }
 
-    public void setMovieid(long movieid) {
-        this.movieid = movieid;
+    public void setMovieId(Long movieId) {
+        this.movieId = movieId;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MOVIEID", unique = true, nullable = false, insertable = false, updatable = false)
     public Movie getMovie() {
         return this.movie;
     }
@@ -43,19 +56,21 @@ public class Link implements java.io.Serializable {
         this.movie = movie;
     }
 
-    public String getImdbid() {
-        return this.imdbid;
+    @Column(name = "IMDBID")
+    public String getImdbId() {
+        return this.imdbId;
     }
 
-    public void setImdbid(String imdbid) {
-        this.imdbid = imdbid;
+    public void setImdbId(String imdbId) {
+        this.imdbId = imdbId;
     }
 
-    public String getTmdbid() {
-        return this.tmdbid;
+    @Column(name = "TMDBID")
+    public String getTmdbId() {
+        return this.tmdbId;
     }
 
-    public void setTmdbid(String tmdbid) {
-        this.tmdbid = tmdbid;
+    public void setTmdbId(String tmdbId) {
+        this.tmdbId = tmdbId;
     }
 }

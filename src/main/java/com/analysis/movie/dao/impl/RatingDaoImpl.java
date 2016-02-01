@@ -1,8 +1,6 @@
 package com.analysis.movie.dao.impl;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -27,55 +25,40 @@ public class RatingDaoImpl implements RatingDao {
         Session session = sessionFactory.getCurrentSession();
         Query query = session
                 .createQuery("from Rating as rating left outer join fetch rating.users as users left outer join fetch rating.movie"
-                        + " where users.userid = :userId");
+                        + " where users.userId = :userId");
         query.setParameter("userId", userId);
         @SuppressWarnings("unchecked")
-        List<Rating> list = query.list();
+        List<Rating> result = query.list();
 
-        return list;
+        return result;
     }
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
     @Override
     public List<Rating> getRelatedRatings(long userId) {
-        // get all movies rated by the user
+        // get all movies rated by the user $userId
         Session session = sessionFactory.getCurrentSession();
-        Query queryUserRatings = session
-                .createQuery("from Rating as rating left outer join fetch rating.users as users left outer join fetch rating.movie"
-                        + " where users.userid = :userId");
-        queryUserRatings.setParameter("userId", userId);
+        Query queryRatingMovies = session
+                .createQuery("select movie.movieId from Rating as rating left outer join rating.users as users left outer join rating.movie"
+                        + " where users.userId = :userId");
+        queryRatingMovies.setParameter("userId", userId);
         @SuppressWarnings("unchecked")
-        List<Rating> ratingsByUser = queryUserRatings.list();
-        // get all the movie ids
-        Set<Long> movieIds = new HashSet<>();
-        for (Rating r : ratingsByUser) {
-            movieIds.add(r.getMovie().getMovieId());
-        }
+        List<Long> movieIds = queryRatingMovies.list();
 
-        // get all ratings on these movies
-        Query queryMovieRatings = session
-                .createQuery("from Rating as rating left outer join fetch rating.movie as movie"
+        // get all users who also gave ratings on these movies rated by the user $userId
+        Query queryRelatedUsers = session
+                .createQuery("select users.userid from Rating as rating left outer join rating.users as users left outer join rating.movie as movie"
                         + " where movie.movieId in (:movieIds)");
-        queryMovieRatings.setParameterList("movieIds", movieIds);
+        queryRelatedUsers.setParameterList("movieIds", movieIds);
         @SuppressWarnings("unchecked")
-        List<Rating> ratingsByMovie = queryMovieRatings.list();
-        // get all users who make the ratings
-        Set<Long> userIds = new HashSet<>();
-        for (Rating r : ratingsByMovie) {
-            userIds.add(r.getUsers().getUserid());
-        }
+        List<Long> relatedUserIds = queryRelatedUsers.list();
         // exclude the user we recommend to
-        userIds.remove(userId);
+        relatedUserIds.remove(userId);
 
         // get all ratings of related users
-        Query queryRelatedUsersRatings = session
-                .createQuery("from Rating as rating left outer join fetch rating.users as users left outer join fetch rating.movie as movie"
-                        + " where users.userid in (:userIds)");
-        queryRelatedUsersRatings.setParameterList("userIds", userIds);
-        @SuppressWarnings("unchecked")
-        List<Rating> results = queryRelatedUsersRatings.list();
+        List<Rating> result = getRatings(relatedUserIds);
 
-        return results;
+        return result;
     }
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
@@ -84,11 +67,11 @@ public class RatingDaoImpl implements RatingDao {
         Session session = sessionFactory.getCurrentSession();
         Query query = session
                 .createQuery("from Rating as rating left outer join fetch rating.users as users left outer join fetch rating.movie as movie left outer join fetch movie.link"
-                        + " where users.userid in (:userIds)");
+                        + " where users.userId in (:userIds)");
         query.setParameterList("userIds", userIds);
         @SuppressWarnings("unchecked")
-        List<Rating> list = query.list();
+        List<Rating> result = query.list();
 
-        return list;
+        return result;
     }
 }

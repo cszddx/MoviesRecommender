@@ -40,7 +40,7 @@ public class CollaborativeFilteringRecommender implements Recommender {
     public List<RecommendedMovie> getRecommendations(long userId) {
         validate(userId);
         // get all similar users of the specified user
-        List<Long> similarUserIds = similarityService.getSimilarUserIds(userId);
+        List<Long> similarUserIds = similarityService.getSimilarUsers(userId);
         // get all Ratings of these similar users
         List<Rating> ratingsBySimilarUsers = ratingService.getRatings(similarUserIds);
         // exclude the movies already seen by the specified user

@@ -1,43 +1,56 @@
 package com.analysis.movie.entity;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "TAG", schema = "MOVIES")
 public class Tag implements java.io.Serializable {
 
     /**
      *
      */
     private static final long serialVersionUID = 1L;
-
-    private long tagid;
+    private Long tagId;
     private Movie movie;
     private Users users;
-    private String tagtxt;
-    private Date createdate;
+    private String tagTxt;
+    private Timestamp createDate;
 
     public Tag() {
     }
 
-    public Tag(long tagid) {
-        this.tagid = tagid;
+    public Tag(Long tagId) {
+        this.tagId = tagId;
     }
 
-    public Tag(long tagid, Movie movie, Users users, String tagtxt, Date createdate) {
-        this.tagid = tagid;
+    public Tag(Long tagId, Movie movie, Users users, String tagTxt, Timestamp createDate) {
+        this.tagId = tagId;
         this.movie = movie;
         this.users = users;
-        this.tagtxt = tagtxt;
-        this.createdate = createdate;
+        this.tagTxt = tagTxt;
+        this.createDate = createDate;
     }
 
-    public long getTagid() {
-        return this.tagid;
+    @Id
+    @Column(name = "TAGID", unique = true, nullable = false)
+    public Long getTagId() {
+        return this.tagId;
     }
 
-    public void setTagid(long tagid) {
-        this.tagid = tagid;
+    public void setTagId(Long tagId) {
+        this.tagId = tagId;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MOVIEID")
     public Movie getMovie() {
         return this.movie;
     }
@@ -46,6 +59,8 @@ public class Tag implements java.io.Serializable {
         this.movie = movie;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USERID")
     public Users getUsers() {
         return this.users;
     }
@@ -54,47 +69,22 @@ public class Tag implements java.io.Serializable {
         this.users = users;
     }
 
-    public String getTagtxt() {
-        return this.tagtxt;
+    @Column(name = "TAGTXT")
+    public String getTagTxt() {
+        return this.tagTxt;
     }
 
-    public void setTagtxt(String tagtxt) {
-        this.tagtxt = tagtxt;
+    public void setTagTxt(String tagTxt) {
+        this.tagTxt = tagTxt;
     }
 
-    public Date getCreatedate() {
-        return this.createdate;
+    @Column(name = "CREATEDATE", length = 29)
+    public Timestamp getCreateDate() {
+        return this.createDate;
     }
 
-    public void setCreatedate(Date createdate) {
-        this.createdate = createdate;
+    public void setCreateDate(Timestamp createDate) {
+        this.createDate = createDate;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (int) (tagid ^ (tagid >>> 32));
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Tag other = (Tag) obj;
-        if (tagid != other.tagid)
-            return false;
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Tag [tagid=" + tagid + ", movie=" + movie + ", users=" + users + ", tagtxt=" + tagtxt + ", createdate="
-                + createdate + "]";
-    }
 }

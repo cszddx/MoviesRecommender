@@ -23,8 +23,8 @@ public class RecommendedMovie {
         this.movieName = movie.getTitle();
 
         if (movie.getLink() != null) {
-            this.imdbId = movie.getLink().getImdbid();
-            this.tmdbId = movie.getLink().getTmdbid();
+            this.imdbId = movie.getLink().getImdbId();
+            this.tmdbId = movie.getLink().getTmdbId();
         }
     }
 

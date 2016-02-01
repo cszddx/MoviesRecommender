@@ -3,45 +3,59 @@ package com.analysis.movie.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "USERS", schema = "MOVIES")
 public class Users implements java.io.Serializable {
+
     /**
      *
      */
     private static final long serialVersionUID = 1L;
-
-    private long userid;
+    private Long userId;
     private String email;
-    private String username;
-    private Set<Tag> tags = new HashSet<>(0);
-    private Set<Rating> ratings = new HashSet<>(0);
-    private Set<Users> similarUsers = new HashSet<>(0);
+    private String userName;
+    private Set<Tag> tags = new HashSet<Tag>(0);
+    private Set<Similarity> similaritiesForUserid = new HashSet<Similarity>(0);
+    private Set<Rating> ratings = new HashSet<Rating>(0);
+    private Set<Similarity> similaritiesForSimilaruserid = new HashSet<Similarity>(0);
 
     public Users() {
     }
 
-    /** minimal constructor */
-    public Users(long userid) {
-        this.userid = userid;
+    public Users(Long userId) {
+        this.userId = userId;
     }
 
-    /** full constructor */
-    public Users(long userid, String email, String username, Set<Tag> tags, Set<Rating> ratings, Set<Users> similarUsers) {
-        this.userid = userid;
+    public Users(Long userId, String email, String userName, Set<Tag> tags, Set<Similarity> similaritiesForUserid,
+            Set<Rating> ratings, Set<Similarity> similaritiesForSimilaruserid) {
+        this.userId = userId;
         this.email = email;
-        this.username = username;
+        this.userName = userName;
         this.tags = tags;
+        this.similaritiesForUserid = similaritiesForUserid;
         this.ratings = ratings;
-        this.similarUsers = similarUsers;
+        this.similaritiesForSimilaruserid = similaritiesForSimilaruserid;
     }
 
-    public long getUserid() {
-        return this.userid;
+    @Id
+    @Column(name = "USERID", unique = true, nullable = false)
+    public Long getUserId() {
+        return this.userId;
     }
 
-    public void setUserid(long userid) {
-        this.userid = userid;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
+    @Column(name = "EMAIL", length = 50)
     public String getEmail() {
         return this.email;
     }
@@ -50,14 +64,16 @@ public class Users implements java.io.Serializable {
         this.email = email;
     }
 
-    public String getUsername() {
-        return this.username;
+    @Column(name = "USERNAME", length = 50)
+    public String getUserName() {
+        return this.userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "users")
     public Set<Tag> getTags() {
         return this.tags;
     }
@@ -66,6 +82,16 @@ public class Users implements java.io.Serializable {
         this.tags = tags;
     }
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "usersByUserid")
+    public Set<Similarity> getSimilaritiesForUserid() {
+        return this.similaritiesForUserid;
+    }
+
+    public void setSimilaritiesForUserid(Set<Similarity> similaritiesForUserid) {
+        this.similaritiesForUserid = similaritiesForUserid;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "users")
     public Set<Rating> getRatings() {
         return this.ratings;
     }
@@ -74,38 +100,13 @@ public class Users implements java.io.Serializable {
         this.ratings = ratings;
     }
 
-    public Set<Users> getSimilarUsers() {
-        return this.similarUsers;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "usersBySimilaruserid")
+    public Set<Similarity> getSimilaritiesForSimilaruserid() {
+        return this.similaritiesForSimilaruserid;
     }
 
-    public void setSimilarUsers(Set<Users> similarUsers) {
-        this.similarUsers = similarUsers;
+    public void setSimilaritiesForSimilaruserid(Set<Similarity> similaritiesForSimilaruserid) {
+        this.similaritiesForSimilaruserid = similaritiesForSimilaruserid;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (int) (userid ^ (userid >>> 32));
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Users other = (Users) obj;
-        if (userid != other.userid)
-            return false;
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Users [userid=" + userid + ", email=" + email + ", username=" + username + "]";
-    }
 }

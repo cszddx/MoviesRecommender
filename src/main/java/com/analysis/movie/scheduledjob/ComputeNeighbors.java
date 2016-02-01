@@ -92,7 +92,7 @@ public class ComputeNeighbors implements Callable<Set<UserSimilarity>> {
 
         List<Rating> ratings = this.ratingService.getRelatedRatings(this.userId);
         for (Rating r : ratings) {
-            Long userId = r.getUsers().getUserid();
+            Long userId = r.getUsers().getUserId();
             if (relatedUsersMap.containsKey(userId)) {
                 Map<Long, Double> movieMap = relatedUsersMap.get(userId);
                 movieMap.put(r.getMovie().getMovieId(), r.getRating());

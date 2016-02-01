@@ -3,80 +3,99 @@ package com.analysis.movie.entity;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Transient;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
-import com.analysis.movie.util.Utilities;
-
+@Entity
+@Table(name = "MOVIE", schema = "MOVIES")
 public class Movie implements java.io.Serializable {
+
     /**
-     * serialVersionUID
+     *
      */
     private static final long serialVersionUID = 1L;
-    private long movieId;
-    private Link link;
+    private Long movieId;
     private String title;
     private String genres;
+    private Set<Rating> ratings = new HashSet<Rating>(0);
+    private Link link;
+    private Set<Tag> tags = new HashSet<Tag>(0);
 
     public Movie() {
     }
 
-    public Movie(long movieId) {
+    public Movie(Long movieId) {
         this.movieId = movieId;
     }
 
-    public Movie(long movieId, Link link, String title, String genres) {
+    public Movie(Long movieId, String title, String genres, Set<Rating> ratings, Link link, Set<Tag> tags) {
         this.movieId = movieId;
-        this.link = link;
         this.title = title;
         this.genres = genres;
+        this.ratings = ratings;
+        this.link = link;
+        this.tags = tags;
     }
 
-    public long getMovieId() {
+    @Id
+    @Column(name = "MOVIEID", unique = true, nullable = false)
+    public Long getMovieId() {
         return this.movieId;
     }
 
-    public void setMovieId(long movieId) {
+    public void setMovieId(Long movieId) {
         this.movieId = movieId;
     }
 
+    @Column(name = "TITLE")
     public String getTitle() {
         return this.title;
     }
 
-    public void setTitle(String Title) {
-        this.title = Title;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
+    @Column(name = "GENRES")
     public String getGenres() {
         return this.genres;
     }
 
-    public void setGenres(String Genres) {
-        this.genres = Genres;
+    public void setGenres(String genres) {
+        this.genres = genres;
     }
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "movie")
+    public Set<Rating> getRatings() {
+        return this.ratings;
+    }
+
+    public void setRatings(Set<Rating> ratings) {
+        this.ratings = ratings;
+    }
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "movie")
     public Link getLink() {
-        return link;
+        return this.link;
     }
 
     public void setLink(Link link) {
         this.link = link;
     }
 
-    @Transient
-    public Set<String> getGenresSet() {
-        Set<String> genresSet = new HashSet<String>();
-        if (!Utilities.isNullOrEmpty(this.genres)) {
-            String[] aGenres = this.genres.split("|");
-            for (String item : aGenres) {
-                genresSet.add(item);
-            }
-        }
-        return genresSet;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "movie")
+    public Set<Tag> getTags() {
+        return this.tags;
     }
 
-    @Override
-    public String toString() {
-        return "Movie [MovieId=" + movieId + ", Title=" + title + ", Genres=" + genres + "]";
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
     }
+
 }
