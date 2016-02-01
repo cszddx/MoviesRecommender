@@ -52,6 +52,18 @@ public class CollaborativeFilteringRecommender implements Recommender {
         return movies;
     }
 
+    public void setUsersService(UsersService usersService) {
+        this.usersService = usersService;
+    }
+
+    public void setRatingService(RatingService ratingService) {
+        this.ratingService = ratingService;
+    }
+
+    public void setSimilarityService(SimilarityService similarityService) {
+        this.similarityService = similarityService;
+    }
+
     private List<RecommendedMovie> getRecommendedMovies(List<Rating> ratings) {
         List<RecommendedMovie> movies = new ArrayList<RecommendedMovie>();
 

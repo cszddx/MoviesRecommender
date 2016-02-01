@@ -18,6 +18,10 @@ public class Utilities {
     }
 
     public static double getDoubleSumValue(Collection<? extends Number> coll) {
+        if (isNullOrEmpty(coll)) {
+            return 0;
+        }
+
         double sum = 0;
         for (Number num : coll) {
             sum += num.doubleValue();
