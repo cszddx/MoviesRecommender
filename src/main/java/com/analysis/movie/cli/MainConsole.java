@@ -21,30 +21,52 @@ public class MainConsole {
     private static final ApplicationContext CONTEXT = new ClassPathXmlApplicationContext("applicationContext.xml");
 
     public static void main(String[] args) {
-        // String userIdInput = readDataFromConsole("Please input the user id:");
-        // long userId = 0;
-        // try {
-        // userId = Long.parseLong(userIdInput);
-        // } catch (NumberFormatException e) {
-        // System.err.println("Please input a valid user id.");
-        // }
-        //
-        // String numberInput = readDataFromConsole("Please input the number of movies recommending to this user:");
-        // int number = 0;
-        // try {
-        // number = Integer.parseInt(userIdInput);
-        // } catch (NumberFormatException e) {
-        // System.err.println("Please input a valid number.");
-        // }
+        long userId = readUserIdFromConsole();
+        int number = readNumberFromConsole();
 
-        long userId = 2L;
         Recommender cfRecommender = CONTEXT.getBean("cfRecommender", Recommender.class);
-        Recommender topNRecommender = new TopNRecommender(cfRecommender, 20, getMovieComparator());
+        Recommender topNRecommender = new TopNRecommender(cfRecommender, number, getMovieComparator());
         List<RecommendedMovie> moviesRecommended = topNRecommender.getRecommendations(userId);
 
         for (RecommendedMovie movie : moviesRecommended) {
             System.out.println(movie);
         }
+    }
+
+    private static int readNumberFromConsole() {
+        String numberInput = readDataFromConsole("Please input the number of movies recommending to this user:");
+        int number = 0;
+        try {
+            number = Integer.parseInt(numberInput);
+        } catch (NumberFormatException e) {
+            System.err.println("Please input a valid number.");
+            readNumberFromConsole();
+        }
+
+        if (number <= 0) {
+            System.err.println("The number must be greater than 0.");
+            readNumberFromConsole();
+        }
+
+        return number;
+    }
+
+    private static long readUserIdFromConsole() {
+        String userIdInput = readDataFromConsole("Please input the user id:");
+        long userId = 0;
+        try {
+            userId = Long.parseLong(userIdInput);
+        } catch (NumberFormatException e) {
+            System.err.println("Please input a valid user id.");
+            readUserIdFromConsole();
+        }
+
+        if (userId <= 0) {
+            System.err.println("User Id must be greater than 0.");
+            readUserIdFromConsole();
+        }
+
+        return userId;
     }
 
     /**

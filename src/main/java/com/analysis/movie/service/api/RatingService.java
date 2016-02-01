@@ -1,6 +1,7 @@
 package com.analysis.movie.service.api;
 
 import java.util.List;
+import java.util.Set;
 
 import com.analysis.movie.entity.Rating;
 
@@ -20,7 +21,7 @@ public interface RatingService {
      * @param userIds
      * @return
      */
-    List<Rating> getRatings(List<Long> userIds);
+    List<Rating> getRatings(Set<Long> userIds);
 
     /**
      * Get the Ratings which are related to the specified user.

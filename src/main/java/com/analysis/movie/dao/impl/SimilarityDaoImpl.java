@@ -1,5 +1,6 @@
 package com.analysis.movie.dao.impl;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,15 +23,15 @@ public class SimilarityDaoImpl implements SimilarityDao {
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
     @Override
-    public List<Long> getSimilarUsers(long userId) {
+    public Set<Long> getSimilarUsers(long userId) {
         Session session = sessionFactory.getCurrentSession();
         Query query = session
-                .createQuery("select similarity.usersBySimilaruserid from Similarity as similarity left outer join similarity.usersByUserid as users where users.userId = :userId");
+                .createQuery("select distinct similarUsers.userId from Similarity as similarity left outer join similarity.usersByUserid as users left outer join similarity.usersBySimilaruserid as similarUsers where users.userId = :userId");
         query.setParameter("userId", userId);
         @SuppressWarnings("unchecked")
         List<Long> result = query.list();
 
-        return result;
+        return new HashSet<Long>(result);
     }
 
     @Override

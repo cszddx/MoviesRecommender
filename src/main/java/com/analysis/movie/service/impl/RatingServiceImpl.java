@@ -1,6 +1,7 @@
 package com.analysis.movie.service.impl;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -30,7 +31,7 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public List<Rating> getRatings(List<Long> userIds) {
+    public List<Rating> getRatings(Set<Long> userIds) {
         List<Rating> ratings = ratingDao.getRatings(userIds);
 
         return ratings;

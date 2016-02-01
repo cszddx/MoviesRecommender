@@ -1,6 +1,5 @@
 package com.analysis.movie.service.impl;
 
-import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -22,7 +21,7 @@ public class SimilarityServiceImpl implements SimilarityService {
     }
 
     @Override
-    public List<Long> getSimilarUsers(long userId) {
+    public Set<Long> getSimilarUsers(long userId) {
         return similarityDao.getSimilarUsers(userId);
     }
 }
