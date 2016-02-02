@@ -1,5 +1,6 @@
 package com.analysis.movie.scheduledjob;
 
+import java.io.Console;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -25,11 +26,14 @@ public class JobExecution {
     private final static ApplicationContext CONTEXT = new ClassPathXmlApplicationContext("applicationContext.xml");
 
     public static void main(String[] args) {
-        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+        long userId = readUserIdFromConsole();
+        int number = readNumberFromConsole();
 
+        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
         try {
             // the job is supposed to execute at midnight
-            ComputeNeighbors computer = CONTEXT.getBean(ComputeNeighbors.class, 1L, 30, new PearsonSimilarity());
+            ComputeNeighbors computer = CONTEXT
+                    .getBean(ComputeNeighbors.class, userId, number, new PearsonSimilarity());
             ScheduledFuture<Set<UserSimilarity>> future = service.schedule(computer, 0, TimeUnit.HOURS);
 
             Set<UserSimilarity> similarUsers = future.get();
@@ -41,6 +45,51 @@ public class JobExecution {
         } finally {
             service.shutdown();
         }
+    }
+
+    private static int readNumberFromConsole() {
+        String numberInput = readDataFromConsole("Please input the number of neighbors of this user:");
+        int number = 0;
+        try {
+            number = Integer.parseInt(numberInput);
+        } catch (NumberFormatException e) {
+            System.err.println("Please input a valid number.");
+            System.exit(1);
+        }
+
+        if (number <= 0) {
+            System.err.println("The number must be greater than 0.");
+            System.exit(1);
+        }
+
+        return number;
+    }
+
+    private static long readUserIdFromConsole() {
+        String userIdInput = readDataFromConsole("Please input the user id:");
+        long userId = 0;
+        try {
+            userId = Long.parseLong(userIdInput);
+        } catch (NumberFormatException e) {
+            System.err.println("Please input a valid user id.");
+            System.exit(1);
+        }
+
+        if (userId <= 0) {
+            System.err.println("User Id must be greater than 0.");
+            System.exit(1);
+        }
+
+        return userId;
+    }
+
+    private static String readDataFromConsole(String prompt) {
+        Console console = System.console();
+        if (console == null) {
+            throw new IllegalStateException("Console is not available!");
+        }
+
+        return console.readLine(prompt);
     }
 
 }
