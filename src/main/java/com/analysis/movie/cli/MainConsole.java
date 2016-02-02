@@ -40,12 +40,12 @@ public class MainConsole {
             number = Integer.parseInt(numberInput);
         } catch (NumberFormatException e) {
             System.err.println("Please input a valid number.");
-            readNumberFromConsole();
+            System.exit(1);
         }
 
         if (number <= 0) {
             System.err.println("The number must be greater than 0.");
-            readNumberFromConsole();
+            System.exit(1);
         }
 
         return number;
@@ -58,12 +58,12 @@ public class MainConsole {
             userId = Long.parseLong(userIdInput);
         } catch (NumberFormatException e) {
             System.err.println("Please input a valid user id.");
-            readUserIdFromConsole();
+            System.exit(1);
         }
 
         if (userId <= 0) {
             System.err.println("User Id must be greater than 0.");
-            readUserIdFromConsole();
+            System.exit(1);
         }
 
         return userId;
